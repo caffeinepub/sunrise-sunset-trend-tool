@@ -125,9 +125,6 @@ importers:
       '@tanstack/react-router':
         specifier: ~1.131.8
         version: 1.131.50(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@types/suncalc':
-        specifier: ^1.9.2
-        version: 1.9.2
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -219,6 +216,9 @@ importers:
       '@types/react-dom':
         specifier: ~19.1.0
         version: 19.1.11(@types/react@19.1.17)
+      '@types/suncalc':
+        specifier: ^1.9.2
+        version: 1.9.2
       '@types/three':
         specifier: 0.176.0
         version: 0.176.0

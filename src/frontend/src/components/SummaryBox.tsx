@@ -18,7 +18,13 @@ function computeYearlyDaylight(
 ): number {
   let total = 0;
   for (let i = 0; i < sunrise.length; i++) {
-    total += (sunset[i].hours - sunrise[i].hours) * 7;
+    const sr = sunrise[i].hours;
+    const ss = sunset[i].hours;
+    if (sr !== null && ss !== null) {
+      total += (ss - sr) * 7;
+    }
+    // polar night (both null) = 0h contribution (already the default)
+    // midnight sun (sr=0, ss=24) = 24h * 7 days = 168h contribution (handled above)
   }
   return total;
 }

@@ -39,8 +39,8 @@ const CROSSING_COLOR = "#94a3b8";
 interface ChartEntry {
   weekIndex: number;
   dateLabel: string;
-  hours1: number;
-  hours2: number;
+  hours1: number | null;
+  hours2: number | null;
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -51,7 +51,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         {payload.map((entry: any) => (
           <p key={entry.name} style={{ color: entry.color }}>
             {entry.name}:{" "}
-            <span className="font-mono">{hoursToTimeLabel(entry.value)}</span>
+            <span className="font-mono">
+              {entry.value !== null && entry.value !== undefined
+                ? hoursToTimeLabel(entry.value)
+                : "Polar night"}
+            </span>
           </p>
         ))}
       </div>
@@ -79,20 +83,20 @@ export default function SunChart({
     hours2: series2[i].hours,
   }));
 
-  // Compute dynamic Y-axis bounds from actual data
-  const allHours = data.flatMap((d) => [d.hours1, d.hours2]);
-  const dataMin = Math.min(...allHours);
-  const dataMax = Math.max(...allHours);
+  // Compute dynamic Y-axis bounds from non-null data only
+  const allHours = data
+    .flatMap((d) => [d.hours1, d.hours2])
+    .filter((h): h is number => h !== null);
+  const dataMin = allHours.length > 0 ? Math.min(...allHours) : 0;
+  const dataMax = allHours.length > 0 ? Math.max(...allHours) : 24;
 
   let yMin: number;
   let yMax: number;
 
   if (chartType === "sunrise") {
-    // Always start from midnight (0), end at ceiling of max sunrise hour
     yMin = 0;
     yMax = Math.ceil(dataMax);
   } else {
-    // Always end at midnight (24), start at floor of min sunset hour
     yMin = Math.floor(dataMin);
     yMax = 24;
   }
@@ -188,6 +192,7 @@ export default function SunChart({
             strokeWidth={2}
             dot={false}
             activeDot={{ r: 5 }}
+            connectNulls={false}
           />
           <Line
             type="monotone"
@@ -197,6 +202,7 @@ export default function SunChart({
             strokeWidth={2}
             dot={false}
             activeDot={{ r: 5 }}
+            connectNulls={false}
           />
 
           {crossings.map((c) => (
