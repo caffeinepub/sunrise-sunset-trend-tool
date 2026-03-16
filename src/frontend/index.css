@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=DM+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark night-sky theme - OKLCH lightness must be 0-1 */
+    --background: 0.10 0.02 255;
+    --foreground: 0.95 0.01 260;
+    --card: 0.14 0.03 255;
+    --card-foreground: 0.95 0.01 260;
+    --popover: 0.14 0.03 255;
+    --popover-foreground: 0.95 0.01 260;
+    --primary: 0.72 0.20 55;
+    --primary-foreground: 0.10 0.02 260;
+    --secondary: 0.20 0.04 255;
+    --secondary-foreground: 0.90 0.02 260;
+    --muted: 0.18 0.03 255;
+    --muted-foreground: 0.65 0.05 260;
+    --accent: 0.55 0.18 200;
+    --accent-foreground: 0.10 0.02 255;
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0.01 25;
+    --border: 0.25 0.04 255;
+    --input: 0.25 0.04 255;
+    --ring: 0.72 0.20 55;
+    --radius: 0.5rem;
+    --chart-1: 0.65 0.22 250;
+    --chart-2: 0.70 0.20 45;
+    --chart-3: 0.72 0.18 160;
+    --chart-4: 0.68 0.20 320;
+    --chart-5: 0.70 0.16 80;
+    --sidebar: 0.12 0.03 255;
+    --sidebar-foreground: 0.90 0.02 260;
+    --sidebar-primary: 0.72 0.20 55;
+    --sidebar-primary-foreground: 0.10 0.02 260;
+    --sidebar-accent: 0.20 0.04 255;
+    --sidebar-accent-foreground: 0.90 0.02 260;
+    --sidebar-border: 0.25 0.04 255;
+    --sidebar-ring: 0.72 0.20 55;
+
+    --loc1: #60a5fa;
+    --loc2: #fb923c;
+    --loc1-muted: rgba(96,165,250,0.15);
+    --loc2-muted: rgba(251,146,60,0.15);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Bricolage Grotesque', sans-serif;
+  }
+}
+
+.recharts-reference-line-label text {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+}
+
+.recharts-reference-dot .recharts-reference-dot-dot {
+  r: 5;
+}
