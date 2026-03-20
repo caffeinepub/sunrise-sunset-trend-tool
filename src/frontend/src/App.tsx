@@ -100,24 +100,24 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/20">
-            <Sun className="w-6 h-6 text-primary" />
+        <div className="max-w-5xl mx-auto px-3 md:px-4 py-3 md:py-4 flex items-center gap-2 md:gap-3">
+          <div className="shrink-0 p-1.5 md:p-2 rounded-lg bg-primary/20">
+            <Sun className="w-5 h-5 md:w-6 md:h-6 text-primary" />
           </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
+          <div className="min-w-0">
+            <h1 className="text-base md:text-xl font-bold tracking-tight text-foreground truncate">
               Teemu's Astronomical tool
             </h1>
-            <p className="text-xs text-muted-foreground">
+            <p className="hidden sm:block text-xs text-muted-foreground">
               Compare sunrise, sunset &amp; solar elevation across locations
             </p>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-        <section className="bg-card rounded-2xl border border-border p-6 shadow-xs">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">
+      <main className="max-w-5xl mx-auto px-3 md:px-4 py-4 md:py-8 space-y-4 md:space-y-8">
+        <section className="bg-card rounded-2xl border border-border p-4 md:p-6 shadow-xs">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4 md:mb-6">
             Configure Locations
           </h2>
           <PlaceInputForm
@@ -135,13 +135,13 @@ export default function App() {
         {loading && (
           <div
             data-ocid="app.loading_state"
-            className="flex flex-col items-center justify-center py-20 gap-4"
+            className="flex flex-col items-center justify-center py-16 gap-4"
           >
             <div className="relative">
-              <div className="w-16 h-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-              <Sun className="absolute inset-0 m-auto w-7 h-7 text-primary" />
+              <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+              <Sun className="absolute inset-0 m-auto w-6 h-6 md:w-7 md:h-7 text-primary" />
             </div>
-            <p className="text-muted-foreground">
+            <p className="text-sm text-center px-4 text-muted-foreground">
               Geocoding locations, resolving timezones, computing solar data...
             </p>
           </div>
@@ -161,21 +161,21 @@ export default function App() {
         )}
 
         {!loading && !error && !chartData && (
-          <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
+          <div className="flex flex-col items-center justify-center py-14 gap-4 text-center">
             <div className="flex gap-4">
-              <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20">
-                <Sunrise className="w-10 h-10 text-primary/80" />
+              <div className="p-3 md:p-4 rounded-2xl bg-primary/10 border border-primary/20">
+                <Sunrise className="w-8 h-8 md:w-10 md:h-10 text-primary/80" />
               </div>
-              <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20">
-                <Sunset className="w-10 h-10 text-primary/80" />
+              <div className="p-3 md:p-4 rounded-2xl bg-primary/10 border border-primary/20">
+                <Sunset className="w-8 h-8 md:w-10 md:h-10 text-primary/80" />
               </div>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-foreground">
                 Ready to explore solar patterns
               </h3>
-              <p className="text-muted-foreground text-sm mt-1 max-w-md">
-                Enter two locations above and click Generate Charts to compare
+              <p className="text-muted-foreground text-sm mt-1 max-w-xs md:max-w-md">
+                Enter two locations above and tap Generate Charts to compare
                 their sunrise, sunset and elevation trends.
               </p>
             </div>
@@ -183,29 +183,29 @@ export default function App() {
         )}
 
         {chartData && !loading && (
-          <div className="space-y-6">
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-              <div className="flex items-center gap-2 text-sm">
+          <div className="space-y-4 md:space-y-6">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <div className="flex items-center gap-2 text-sm min-w-0">
                 <span
-                  className="inline-block w-4 h-0.5"
+                  className="inline-block w-4 h-0.5 shrink-0"
                   style={{ background: "var(--loc1)" }}
                 />
-                <span className="text-foreground font-medium">
+                <span className="text-foreground font-medium truncate">
                   {chartData.label1}
                 </span>
-                <span className="text-muted-foreground text-xs">
+                <span className="hidden sm:inline shrink-0 text-muted-foreground text-xs">
                   ({chartData.tz1})
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-2 text-sm min-w-0">
                 <span
-                  className="inline-block w-4 h-0.5"
+                  className="inline-block w-4 h-0.5 shrink-0"
                   style={{ background: "var(--loc2)" }}
                 />
-                <span className="text-foreground font-medium">
+                <span className="text-foreground font-medium truncate">
                   {chartData.label2}
                 </span>
-                <span className="text-muted-foreground text-xs">
+                <span className="hidden sm:inline shrink-0 text-muted-foreground text-xs">
                   ({chartData.tz2})
                 </span>
               </div>
@@ -261,7 +261,7 @@ export default function App() {
         )}
       </main>
 
-      <footer className="border-t border-border mt-16 py-6 text-center text-sm text-muted-foreground">
+      <footer className="border-t border-border mt-12 py-5 text-center text-xs text-muted-foreground">
         © {new Date().getFullYear()}. Built with ❤️ using{" "}
         <a
           href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}

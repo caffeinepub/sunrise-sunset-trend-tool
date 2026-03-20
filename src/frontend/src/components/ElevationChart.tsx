@@ -1,3 +1,4 @@
+import { useIsMobile } from "@/hooks/use-mobile";
 import type { CrossingAnnotation, ElevationPoint } from "@/utils/solar";
 import {
   CartesianGrid,
@@ -64,6 +65,16 @@ export default function ElevationChart({
   label2,
   crossings,
 }: Props) {
+  const isMobile = useIsMobile();
+
+  const chartHeight = isMobile ? 240 : 320;
+  const marginLeft = isMobile ? 10 : 20;
+  const marginRight = isMobile ? 10 : 40;
+  const yAxisWidth = isMobile ? 40 : 55;
+  const tickFontSize = isMobile ? 10 : 12;
+  const annotFontSize = isMobile ? 9 : 11;
+  const legendFontSize = isMobile ? 11 : 13;
+
   const data = series1.map((pt, i) => ({
     weekIndex: pt.weekIndex,
     dateLabel: pt.dateLabel,
@@ -80,6 +91,10 @@ export default function ElevationChart({
       lastMonth = month;
     }
   }
+
+  const visibleXTicks = isMobile
+    ? xTicks.filter((_, i) => i % 2 === 0)
+    : xTicks;
 
   const xTickFmt = (idx: number) => {
     const pt = series1[idx];
@@ -110,55 +125,51 @@ export default function ElevationChart({
 
   return (
     <div
-      className="rounded-xl border border-border bg-card p-4 md:p-6"
+      className="rounded-xl border border-border bg-card p-3 md:p-6"
       data-ocid="elevation.chart_point"
     >
-      <h3 className="text-lg font-semibold text-foreground mb-4">
+      <h3 className="text-base md:text-lg font-semibold text-foreground mb-3 md:mb-4">
         ☀️ Max Solar Elevation at Noon
       </h3>
-      <ResponsiveContainer width="100%" height={320}>
+      <ResponsiveContainer width="100%" height={chartHeight}>
         <LineChart
           data={data}
-          margin={{ top: 20, right: 40, bottom: 20, left: 60 }}
+          margin={{
+            top: isMobile ? 14 : 20,
+            right: marginRight,
+            bottom: isMobile ? 16 : 20,
+            left: marginLeft,
+          }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
           <XAxis
             dataKey="weekIndex"
-            ticks={xTicks}
+            ticks={visibleXTicks}
             tickFormatter={xTickFmt}
-            tick={{ fontSize: 12, fill: TICK }}
+            tick={{ fontSize: tickFontSize, fill: TICK }}
             axisLine={{ stroke: GRID }}
             tickLine={{ stroke: GRID }}
-            label={{
-              value: "Week",
-              position: "insideBottom",
-              offset: -10,
-              fontSize: 12,
-              fill: TICK,
-            }}
           />
           <YAxis
             domain={[yMin, yMax]}
             ticks={yTicks}
             tickFormatter={(v) => `${v}°`}
-            tick={{ fontSize: 12, fill: TICK }}
+            tick={{ fontSize: tickFontSize, fill: TICK }}
             axisLine={{ stroke: GRID }}
             tickLine={{ stroke: GRID }}
-            width={55}
-            label={{
-              value: "Degrees",
-              angle: -90,
-              position: "insideLeft",
-              offset: -10,
-              fontSize: 12,
-              fill: TICK,
-            }}
+            width={yAxisWidth}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value) => (
-              <span style={{ fontSize: 13, color: TICK }}>{value}</span>
+              <span style={{ fontSize: legendFontSize, color: TICK }}>
+                {value}
+              </span>
             )}
+            wrapperStyle={{
+              fontSize: legendFontSize,
+              paddingTop: isMobile ? 4 : 8,
+            }}
           />
           <Line
             type="monotone"
@@ -167,7 +178,7 @@ export default function ElevationChart({
             stroke={LOC1}
             strokeWidth={2}
             dot={false}
-            activeDot={{ r: 5 }}
+            activeDot={{ r: isMobile ? 4 : 5 }}
           />
           <Line
             type="monotone"
@@ -176,7 +187,7 @@ export default function ElevationChart({
             stroke={LOC2}
             strokeWidth={2}
             dot={false}
-            activeDot={{ r: 5 }}
+            activeDot={{ r: isMobile ? 4 : 5 }}
           />
           {crossings.map((c) => (
             <ReferenceLine
@@ -188,7 +199,7 @@ export default function ElevationChart({
               label={{
                 value: c.dateLabel,
                 position: "top",
-                fontSize: 11,
+                fontSize: annotFontSize,
                 fill: TICK,
               }}
             />
@@ -196,56 +207,56 @@ export default function ElevationChart({
           <ReferenceDot
             x={series1[max1].weekIndex}
             y={Number.parseFloat(series1[max1].elevation.toFixed(2))}
-            r={5}
+            r={isMobile ? 4 : 5}
             fill={LOC1}
             stroke="#1e293b"
             strokeWidth={2}
             label={{
               value: `${series1[max1].elevation.toFixed(1)}°`,
               position: "top",
-              fontSize: 11,
+              fontSize: annotFontSize,
               fill: LOC1,
             }}
           />
           <ReferenceDot
             x={series1[min1].weekIndex}
             y={Number.parseFloat(series1[min1].elevation.toFixed(2))}
-            r={5}
+            r={isMobile ? 4 : 5}
             fill={LOC1}
             stroke="#1e293b"
             strokeWidth={2}
             label={{
               value: `${series1[min1].elevation.toFixed(1)}°`,
               position: "bottom",
-              fontSize: 11,
+              fontSize: annotFontSize,
               fill: LOC1,
             }}
           />
           <ReferenceDot
             x={series2[max2].weekIndex}
             y={Number.parseFloat(series2[max2].elevation.toFixed(2))}
-            r={5}
+            r={isMobile ? 4 : 5}
             fill={LOC2}
             stroke="#1e293b"
             strokeWidth={2}
             label={{
               value: `${series2[max2].elevation.toFixed(1)}°`,
               position: "top",
-              fontSize: 11,
+              fontSize: annotFontSize,
               fill: LOC2,
             }}
           />
           <ReferenceDot
             x={series2[min2].weekIndex}
             y={Number.parseFloat(series2[min2].elevation.toFixed(2))}
-            r={5}
+            r={isMobile ? 4 : 5}
             fill={LOC2}
             stroke="#1e293b"
             strokeWidth={2}
             label={{
               value: `${series2[min2].elevation.toFixed(1)}°`,
               position: "bottom",
-              fontSize: 11,
+              fontSize: annotFontSize,
               fill: LOC2,
             }}
           />

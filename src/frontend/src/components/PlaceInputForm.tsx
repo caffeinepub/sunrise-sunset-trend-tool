@@ -35,7 +35,7 @@ export default function PlaceInputForm({
   onGenerate,
 }: Props) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 md:gap-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label className="flex items-center gap-2 text-sm font-medium">
@@ -80,7 +80,7 @@ export default function PlaceInputForm({
           </div>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row gap-4 items-end">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-end">
         <div className="space-y-2">
           <Label className="text-sm font-medium">Year</Label>
           <Select
@@ -88,7 +88,7 @@ export default function PlaceInputForm({
             onValueChange={(v) => onYearChange(Number(v))}
             disabled={loading}
           >
-            <SelectTrigger data-ocid="year.select" className="w-32">
+            <SelectTrigger data-ocid="year.select" className="w-full sm:w-32">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -104,7 +104,7 @@ export default function PlaceInputForm({
           data-ocid="generate.primary_button"
           onClick={onGenerate}
           disabled={loading || !place1.trim() || !place2.trim()}
-          className="flex items-center gap-2 px-8"
+          className="w-full sm:w-auto sm:px-8 flex items-center justify-center gap-2"
         >
           {loading ? (
             <Loader2 className="w-4 h-4 animate-spin" />

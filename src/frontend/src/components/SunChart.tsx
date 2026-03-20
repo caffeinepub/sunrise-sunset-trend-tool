@@ -1,3 +1,4 @@
+import { useIsMobile } from "@/hooks/use-mobile";
 import { hoursToTimeLabel } from "@/utils/solar";
 import type {
   CrossingAnnotation,
@@ -76,6 +77,16 @@ export default function SunChart({
   peaks1,
   peaks2,
 }: Props) {
+  const isMobile = useIsMobile();
+
+  const chartHeight = isMobile ? 260 : 360;
+  const marginLeft = isMobile ? 10 : 20;
+  const marginRight = isMobile ? 10 : 40;
+  const yAxisWidth = isMobile ? 48 : 55;
+  const tickFontSize = isMobile ? 10 : 12;
+  const annotFontSize = isMobile ? 9 : 11;
+  const legendFontSize = isMobile ? 11 : 13;
+
   const data: ChartEntry[] = series1.map((pt, i) => ({
     weekIndex: pt.weekIndex,
     dateLabel: pt.dateLabel,
@@ -115,6 +126,10 @@ export default function SunChart({
     }
   }
 
+  const visibleXTicks = isMobile
+    ? xTicks.filter((_, i) => i % 2 === 0)
+    : xTicks;
+
   const xTickFormatter = (idx: number) => {
     const pt = series1[idx];
     if (!pt) return "";
@@ -139,49 +154,55 @@ export default function SunChart({
 
   return (
     <div
-      className="rounded-xl border border-border bg-card p-4 md:p-6"
+      className="rounded-xl border border-border bg-card p-3 md:p-6"
       data-ocid={dataOcid}
     >
-      <h3 className="text-lg font-semibold text-foreground mb-4">{title}</h3>
-      <ResponsiveContainer width="100%" height={360}>
+      <h3 className="text-base md:text-lg font-semibold text-foreground mb-3 md:mb-4">
+        {title}
+      </h3>
+      <ResponsiveContainer width="100%" height={chartHeight}>
         <LineChart
           data={data}
-          margin={{ top: 20, right: 40, bottom: 20, left: 60 }}
+          margin={{
+            top: isMobile ? 14 : 20,
+            right: marginRight,
+            bottom: isMobile ? 16 : 20,
+            left: marginLeft,
+          }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
           <XAxis
             dataKey="weekIndex"
-            ticks={xTicks}
+            ticks={visibleXTicks}
             tickFormatter={xTickFormatter}
-            tick={{ fontSize: 12, fill: TICK_COLOR }}
+            tick={{ fontSize: tickFontSize, fill: TICK_COLOR }}
             axisLine={{ stroke: GRID_COLOR }}
             tickLine={{ stroke: GRID_COLOR }}
-            label={{
-              value: "Week",
-              position: "insideBottom",
-              offset: -10,
-              fontSize: 12,
-              fill: TICK_COLOR,
-            }}
           />
           <YAxis
             domain={[yMin, yMax]}
             ticks={yTicks}
             tickFormatter={yTickFormatter}
             tick={{
-              fontSize: 12,
+              fontSize: tickFontSize,
               fontFamily: "'DM Mono', monospace",
               fill: TICK_COLOR,
             }}
             axisLine={{ stroke: GRID_COLOR }}
             tickLine={{ stroke: GRID_COLOR }}
-            width={55}
+            width={yAxisWidth}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value) => (
-              <span style={{ fontSize: 13, color: TICK_COLOR }}>{value}</span>
+              <span style={{ fontSize: legendFontSize, color: TICK_COLOR }}>
+                {value}
+              </span>
             )}
+            wrapperStyle={{
+              fontSize: legendFontSize,
+              paddingTop: isMobile ? 4 : 8,
+            }}
           />
 
           <Line
@@ -191,7 +212,7 @@ export default function SunChart({
             stroke={LOC1_COLOR}
             strokeWidth={2}
             dot={false}
-            activeDot={{ r: 5 }}
+            activeDot={{ r: isMobile ? 4 : 5 }}
             connectNulls={false}
           />
           <Line
@@ -201,7 +222,7 @@ export default function SunChart({
             stroke={LOC2_COLOR}
             strokeWidth={2}
             dot={false}
-            activeDot={{ r: 5 }}
+            activeDot={{ r: isMobile ? 4 : 5 }}
             connectNulls={false}
           />
 
@@ -215,7 +236,7 @@ export default function SunChart({
               label={{
                 value: c.dateLabel,
                 position: "top",
-                fontSize: 11,
+                fontSize: annotFontSize,
                 fill: CROSSING_COLOR,
                 fontFamily: "'DM Mono', monospace",
               }}
@@ -225,14 +246,14 @@ export default function SunChart({
           <ReferenceDot
             x={peaks1.max.weekIndex}
             y={peaks1.max.hours}
-            r={5}
+            r={isMobile ? 4 : 5}
             fill={LOC1_COLOR}
             stroke="#1e293b"
             strokeWidth={2}
             label={{
               value: peaks1.max.dateLabel,
               position: "top",
-              fontSize: 11,
+              fontSize: annotFontSize,
               fill: LOC1_COLOR,
               fontFamily: "'DM Mono', monospace",
             }}
@@ -240,14 +261,14 @@ export default function SunChart({
           <ReferenceDot
             x={peaks1.min.weekIndex}
             y={peaks1.min.hours}
-            r={5}
+            r={isMobile ? 4 : 5}
             fill={LOC1_COLOR}
             stroke="#1e293b"
             strokeWidth={2}
             label={{
               value: peaks1.min.dateLabel,
               position: "bottom",
-              fontSize: 11,
+              fontSize: annotFontSize,
               fill: LOC1_COLOR,
               fontFamily: "'DM Mono', monospace",
             }}
@@ -256,14 +277,14 @@ export default function SunChart({
           <ReferenceDot
             x={peaks2.max.weekIndex}
             y={peaks2.max.hours}
-            r={5}
+            r={isMobile ? 4 : 5}
             fill={LOC2_COLOR}
             stroke="#1e293b"
             strokeWidth={2}
             label={{
               value: peaks2.max.dateLabel,
               position: "top",
-              fontSize: 11,
+              fontSize: annotFontSize,
               fill: LOC2_COLOR,
               fontFamily: "'DM Mono', monospace",
             }}
@@ -271,14 +292,14 @@ export default function SunChart({
           <ReferenceDot
             x={peaks2.min.weekIndex}
             y={peaks2.min.hours}
-            r={5}
+            r={isMobile ? 4 : 5}
             fill={LOC2_COLOR}
             stroke="#1e293b"
             strokeWidth={2}
             label={{
               value: peaks2.min.dateLabel,
               position: "bottom",
-              fontSize: 11,
+              fontSize: annotFontSize,
               fill: LOC2_COLOR,
               fontFamily: "'DM Mono', monospace",
             }}
